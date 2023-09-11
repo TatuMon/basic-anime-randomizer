@@ -7,7 +7,13 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
     return (
         <>
-            { children }
+            <head>
+                <title>Basic Anime Randomizer</title>
+                <link rel="stylesheet" href="css/styles.css" />
+            </head>
+            <body>
+                { children }
+            </body>
         </>
     )
 }

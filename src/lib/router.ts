@@ -1,6 +1,7 @@
 import { HttpMethod } from "./types/HttpMethod";
 import { RouteHandler } from "./types/RouteHandler";
 import NotFound from "./exceptions/NotFound";
+import serveStatic from "serve-static-bun";
 
 interface Route {
     method: HttpMethod,
@@ -39,7 +40,7 @@ export async function handleRequest(request: Request): Promise<Response> {
     const matchingRoute = routes.find((route) => route.path.toLowerCase() == requestRoute);
 
     if (!matchingRoute) {
-        throw new NotFound(requestRoute);
+        return (serveStatic("public")(request));
     }
 
     const handledRoute = await matchingRoute.handler(request);
