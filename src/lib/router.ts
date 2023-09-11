@@ -1,0 +1,59 @@
+import { HttpMethod } from "./types/HttpMethod";
+import { RouteHandler } from "./types/RouteHandler";
+import NotFound from "./exceptions/NotFound";
+
+interface Route {
+    method: HttpMethod,
+    path: string,
+    handler: RouteHandler
+}
+
+const defaultResponse = new Response("Ok", {
+    status: 200
+});
+
+let routes: Route[] = [];
+
+function get(path: string, handler: RouteHandler) {
+    const newRoute: Route = {
+        method: "GET",
+        path,
+        handler
+    }
+
+    routes.push(newRoute);
+}
+
+function post(path: string, handler: RouteHandler) {
+    const newRoute: Route = {
+        method: "POST",
+        path,
+        handler
+    }
+
+    routes.push(newRoute);
+}
+
+export function handleRequest(request: Request): Response {
+    const requestRoute = new URL(request.url).pathname.toLowerCase();
+    const matchingRoute = routes.find((route) => route.path.toLowerCase() == requestRoute);
+
+    if (!matchingRoute) {
+        throw new NotFound(requestRoute);
+    }
+
+    const handledRoute = matchingRoute.handler(request);
+
+    if (handledRoute instanceof Response) {
+        return handledRoute;
+    } else {
+        return defaultResponse;
+    }
+}
+
+const router = {
+    get,
+    post
+}
+
+export default router;
