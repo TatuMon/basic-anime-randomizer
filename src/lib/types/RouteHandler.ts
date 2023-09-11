@@ -1,1 +1,1 @@
-export type RouteHandler = (request: Request) => Response|void
+export type RouteHandler = (request: Request) => Response|Promise<Response>|void

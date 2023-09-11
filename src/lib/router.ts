@@ -34,7 +34,7 @@ function post(path: string, handler: RouteHandler) {
     routes.push(newRoute);
 }
 
-export function handleRequest(request: Request): Response {
+export async function handleRequest(request: Request): Promise<Response> {
     const requestRoute = new URL(request.url).pathname.toLowerCase();
     const matchingRoute = routes.find((route) => route.path.toLowerCase() == requestRoute);
 
@@ -42,7 +42,7 @@ export function handleRequest(request: Request): Response {
         throw new NotFound(requestRoute);
     }
 
-    const handledRoute = matchingRoute.handler(request);
+    const handledRoute = await matchingRoute.handler(request);
 
     if (handledRoute instanceof Response) {
         return handledRoute;

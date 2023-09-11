@@ -15,6 +15,10 @@ router.get("/randomize", (request) => {
     return randomize(request);
 });
 
+router.get("/styles.css", (request) => {
+    //TODO
+})
+
 Bun.serve({
     port: env.PORT,
     development: env.NODE_ENV != "prod",
